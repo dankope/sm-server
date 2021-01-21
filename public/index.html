@@ -6,7 +6,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.3/pixi.min.js"></script>
     <script>
         window.onload = function () {
-            var conn = new WebSocket("ws://{{.Host}}/ws");
+            var conn = new WebSocket("ws://" + location.host + "/ws");
             const app = new PIXI.Application({
                 antialias: true,
                 transparent: true,
@@ -15,21 +15,35 @@
                 resolution: devicePixelRatio
             });
             document.body.appendChild(app.view);
+            const logo = new PIXI.Sprite.from('https://www.onetap.com/cdn-cgi/image/f=auto/styles/onetap/onetap/small-logo.png');
+            logo.anchor.set(0.5);
             const graphics = new PIXI.Graphics();
             conn.onclose = function (evt) {
-                graphics.clear()
+                graphics.clear();
             }
             conn.onmessage = function (evt) {
-                graphics.clear()
-
-                graphics.beginFill(0xDE3249);
-                graphics.drawRect(evt.data, 50, 100, 100);
-                graphics.endFill();
+                data = JSON.parse(evt.data);
+                graphics.clear();
+                logo.alpha = 0;
+                if (data["MENU"]["OPEN"]) {
+                    graphics.beginFill(0x232328);
+                    graphics.drawRect(data["MENU"]["INFO"][0], data["MENU"]["INFO"][1], data["MENU"]["INFO"][2], data["MENU"]["INFO"][3]);
+                    graphics.endFill();
+                    logo.x = data["MENU"]["INFO"][0] + (data["MENU"]["INFO"][2] / 2);
+                    logo.y = data["MENU"]["INFO"][1] + (data["MENU"]["INFO"][3] / 2);
+                    logo.alpha = 255;
+                }
+                if (data["CONSOLE"]) {
+                    graphics.beginFill(0x232328);
+                    graphics.drawRect(0, 0, app.screen.width, app.screen.height);
+                    graphics.endFill();
+                    logo.x = app.screen.width / 2;
+                    logo.y = app.screen.height / 2;
+                    logo.alpha = 255;
+                }
             }
-            graphics.beginFill(0xDE3249);
-            graphics.drawRect(50, 50, 100, 100);
-            graphics.endFill();
             app.stage.addChild(graphics);
+            app.stage.addChild(logo);
         }
     </script>
 </head>

@@ -44,7 +44,6 @@ func writer(ws *websocket.Conn) {
 		case data := <-hook.Reader:
 			// tell the client all the data, you could also do this a number of different ways
 			// maybe you would prefer to run this code without the middleman with WASM
-			println(string(data))
 			if data != nil {
 				ws.SetWriteDeadline(time.Now().Add(writeWait))
 				if err := ws.WriteMessage(websocket.TextMessage, data); err != nil {
