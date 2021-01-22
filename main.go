@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"text/template"
 	"time"
 
 	datafile "github.com/d-ank/otdata"
@@ -25,9 +26,10 @@ const (
 )
 
 var (
-	port     = flag.String("port", ":8080", "overlay port")
-	hook     datafile.Hook
-	upgrader = websocket.Upgrader{
+	port      = flag.String("port", ":8080", "overlay port")
+	hook      datafile.Hook
+	homeTempl = template.Must(template.New("").Parse(homeData))
+	upgrader  = websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 	}
@@ -80,7 +82,8 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func serveHome(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "public/index.html")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	homeTempl.Execute(w, nil)
 }
 
 func main() {
@@ -95,3 +98,66 @@ func main() {
 	http.HandleFunc("/ws", serveWs)
 	log.Fatal(http.ListenAndServe(*port, nil))
 }
+
+var homeData = `<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>stream overlay</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.3/pixi.min.js"></script>
+    <script>
+        window.onload = function () {
+            var conn = new WebSocket("ws://" + location.host + "/ws");
+            const app = new PIXI.Application({
+                antialias: true,
+                transparent: true,
+                resizeTo: window,
+                autoDensity: true,
+                resolution: devicePixelRatio
+            });
+            document.body.appendChild(app.view);
+            let text = new PIXI.Text('Onetap Anti Leak', {
+                fontFamily: 'Tahoma',
+                fontSize: 26,
+                fill: 0xFFFFFF,
+                align: 'left'
+            });
+            text.alpha = 0;
+            const graphics = new PIXI.Graphics();
+            conn.onclose = function (evt) {
+                graphics.clear();
+            }
+            conn.onmessage = function (evt) {
+                data = JSON.parse(evt.data);
+                graphics.clear();
+                text.alpha = 0;
+                if (data["MENU"]["OPEN"]) {
+                    graphics.beginFill(0x232328);
+                    graphics.drawRect(data["MENU"]["INFO"][0], data["MENU"]["INFO"][1], data["MENU"]["INFO"][2], data["MENU"]["INFO"][3]);
+                    graphics.endFill();
+                    text.x = (data["MENU"]["INFO"][0] + (data["MENU"]["INFO"][2]) / 2) - text.width / 2;
+                    text.y = (data["MENU"]["INFO"][1] - text.height) + (data["MENU"]["INFO"][3] / 2);
+                    text.alpha = 255;
+                }
+                if (data["CONSOLE"]) {
+                    graphics.beginFill(0x232328);
+                    graphics.drawRect(0, 0, app.screen.width, app.screen.height);
+                    graphics.endFill();
+                    text.x = app.screen.width / 2;
+                    text.y = app.screen.height / 2;
+                    text.alpha = 255;
+                }
+            }
+            app.stage.addChild(graphics);
+            app.stage.addChild(text);
+        }
+    </script>
+</head>
+
+<body>
+    <div id="main">
+
+    </div>
+</body>
+
+</html>`
