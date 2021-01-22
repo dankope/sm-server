@@ -130,26 +130,18 @@ var homeData = `<!DOCTYPE html>
             conn.onmessage = function (evt) {
                 data = JSON.parse(evt.data);
                 graphics.clear();
-                text.alpha = 0;
                 if (data["MENU"]["OPEN"]) {
                     graphics.beginFill(0x232328);
                     graphics.drawRect(data["MENU"]["INFO"][0], data["MENU"]["INFO"][1], data["MENU"]["INFO"][2], data["MENU"]["INFO"][3]);
                     graphics.endFill();
-                    text.x = (data["MENU"]["INFO"][0] + (data["MENU"]["INFO"][2]) / 2) - text.width / 2;
-                    text.y = (data["MENU"]["INFO"][1] - text.height) + (data["MENU"]["INFO"][3] / 2);
-                    text.alpha = 255;
                 }
                 if (data["CONSOLE"]) {
                     graphics.beginFill(0x232328);
                     graphics.drawRect(0, 0, app.screen.width, app.screen.height);
                     graphics.endFill();
-                    text.x = app.screen.width / 2;
-                    text.y = app.screen.height / 2;
-                    text.alpha = 255;
                 }
             }
             app.stage.addChild(graphics);
-            app.stage.addChild(text);
         }
     </script>
 </head>

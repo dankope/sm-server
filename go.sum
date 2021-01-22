@@ -1,7 +1,9 @@
 github.com/Jeffail/gabs v1.4.0 h1://5fYRRTq1edjfIrQGvdkcd22pkYUrHZ5YC/H2GJVAo=
 github.com/Jeffail/gabs v1.4.0/go.mod h1:6xMvQMK4k33lb7GUUpaAPh6nKMmemQeg5d4gn7/bOXc=
-github.com/d-ank/otdata v0.0.0-20210121003234-37037791527e h1:OFJvfxy/X2y+a1H80VLzHTzFpn0b7cmmWNupQiP5664=
-github.com/d-ank/otdata v0.0.0-20210121003234-37037791527e/go.mod h1:4GJauS95az6WAb13Je2WKPskSAogL3QTMQ+MnB93o+s=
+github.com/d-ank/otdata v0.0.0-20210122020146-b84dabf32d07 h1:OJYgudyL3W+4D10Yf11mi6J/X/ec/7tk5r8E1v8vEvs=
+github.com/d-ank/otdata v0.0.0-20210122020146-b84dabf32d07/go.mod h1:4GJauS95az6WAb13Je2WKPskSAogL3QTMQ+MnB93o+s=
+github.com/d-ank/otdata v0.0.0-20210122024951-2dc7d0ef83d3 h1:udTNKs33HrasHuzebB+H5h5BTVfonqQ/TXPQWTs4Y/I=
+github.com/d-ank/otdata v0.0.0-20210122024951-2dc7d0ef83d3/go.mod h1:4GJauS95az6WAb13Je2WKPskSAogL3QTMQ+MnB93o+s=
 github.com/gorilla/websocket v1.4.2 h1:+/TMaTYc4QFitKJxsQ7Yye35DkWvkdLcvGKqM+x0Ufc=
 github.com/gorilla/websocket v1.4.2/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 golang.org/x/sys v0.0.0-20210119212857-b64e53b001e4 h1:myAQVi0cGEoqQVR5POX+8RR2mrocKqNN1hmeMqhX27k=

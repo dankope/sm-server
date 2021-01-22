@@ -3,6 +3,6 @@ module smserver
 go 1.15
 
 require (
-	github.com/d-ank/otdata v0.0.0-20210121003234-37037791527e
+	github.com/d-ank/otdata v0.0.0-20210122024951-2dc7d0ef83d3
 	github.com/gorilla/websocket v1.4.2
 )
