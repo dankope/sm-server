@@ -15,8 +15,13 @@
                 resolution: devicePixelRatio
             });
             document.body.appendChild(app.view);
-            const logo = new PIXI.Sprite.from('https://www.onetap.com/cdn-cgi/image/f=auto/styles/onetap/onetap/small-logo.png');
-            logo.anchor.set(0.5);
+            let text = new PIXI.Text('Onetap Anti Leak', {
+                fontFamily: 'Tahoma',
+                fontSize: 26,
+                fill: 0xFFFFFF,
+                align: 'left'
+            });
+            text.alpha = 0;
             const graphics = new PIXI.Graphics();
             conn.onclose = function (evt) {
                 graphics.clear();
@@ -24,26 +29,26 @@
             conn.onmessage = function (evt) {
                 data = JSON.parse(evt.data);
                 graphics.clear();
-                logo.alpha = 0;
+                text.alpha = 0;
                 if (data["MENU"]["OPEN"]) {
                     graphics.beginFill(0x232328);
                     graphics.drawRect(data["MENU"]["INFO"][0], data["MENU"]["INFO"][1], data["MENU"]["INFO"][2], data["MENU"]["INFO"][3]);
                     graphics.endFill();
-                    logo.x = data["MENU"]["INFO"][0] + (data["MENU"]["INFO"][2] / 2);
-                    logo.y = data["MENU"]["INFO"][1] + (data["MENU"]["INFO"][3] / 2);
-                    logo.alpha = 255;
+                    text.x = (data["MENU"]["INFO"][0] + (data["MENU"]["INFO"][2]) / 2) - text.width / 2;
+                    text.y = (data["MENU"]["INFO"][1] - text.height) + (data["MENU"]["INFO"][3] / 2);
+                    text.alpha = 255;
                 }
                 if (data["CONSOLE"]) {
                     graphics.beginFill(0x232328);
                     graphics.drawRect(0, 0, app.screen.width, app.screen.height);
                     graphics.endFill();
-                    logo.x = app.screen.width / 2;
-                    logo.y = app.screen.height / 2;
-                    logo.alpha = 255;
+                    text.x = app.screen.width / 2;
+                    text.y = app.screen.height / 2;
+                    text.alpha = 255;
                 }
             }
             app.stage.addChild(graphics);
-            app.stage.addChild(logo);
+            app.stage.addChild(text);
         }
     </script>
 </head>
